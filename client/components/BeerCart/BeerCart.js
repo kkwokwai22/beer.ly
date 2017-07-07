@@ -5,22 +5,18 @@ import styles from './BeerCart.css';
 
 import RaisedButton from 'material-ui/RaisedButton';
 
-const cartSize = 4;
+const CART_SIZE = 4;
 
-const BeerCart = (props) => {
-  const cartItems = props.beers.map((beer, index) => {
-    return <CartItem key={index} beer={beer} index={index} removeFromCart={props.removeFromCart} />;
+const BeerCart = ({ beers, removeFromCart, inCheckout, checkout }) => {
+  const cartItems = beers.map((beer, index) => {
+    return <CartItem key={index} beer={beer} removeFromCart={removeFromCart(index)} />;
   });
 
   const cartDetailsHandler = cartItems.length ?
-    <h4>Your Cart has {cartItems.length} / 4 selections</h4>
+    <h4>Your Cart has `${cartItems.length}` / 4 selections</h4>
     : <h4>Your Cart is Empty!</h4>;
 
-  const button = props.inCheckout ?
-    null
-    : <RaisedButton className={styles.button} primary onClick={props.checkout} label="Checkout" />;
-
-  const checkout = props.beers.length === cartSize ? <div>{button}</div> : null;
+  const checkout = beers.length === CART_SIZE && inCheckout && <RaisedButton className={styles.button} primary onClick={checkout} label="Checkout" />;
 
   return (
     <div className={styles.wrapper}>
@@ -30,7 +26,6 @@ const BeerCart = (props) => {
       </div>
       <div className={styles.cartRow}>
       {cartItems}
-
       </div>
     </div>
   );
